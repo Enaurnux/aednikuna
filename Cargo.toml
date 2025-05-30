@@ -1,0 +1,12 @@
+[package]
+name = "aednikuna"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+crossterm = "0.29.0"
+devicons = "0.6.12"
+hex_color = "3.0.0"
+log = "0.4.27"
+ratatui = "0.29.0"
+simple-logging = "2.0.2"
