@@ -22,16 +22,61 @@ impl App {
 
     fn key_main(&mut self, key_event: KeyEvent) {
         match key_event.code {
+            KeyCode::Char('1') | KeyCode::Char('2') | KeyCode::Char('3') |
+            KeyCode::Char('4') | KeyCode::Char('5') | KeyCode::Char('6') |
+            KeyCode::Char('7') | KeyCode::Char('8') | KeyCode::Char('9') |
+            KeyCode::Char('0') => {
+                self.number_buffer += &key_event.code.as_char().unwrap().to_string();
+                log::info!("{}", self.number_buffer);
+            }
             KeyCode::Char('q') => {
                 self.exit();
             }
             KeyCode::Char('j') => {
-                self.move_down();
-                self.request_list();
+                let mut count: usize = 1;
+                if !self.number_buffer.is_empty() {
+                    count = self.number_buffer.parse::<usize>().unwrap();
+                }
+                self.number_buffer = String::new();
+                for _ in 0..count {
+                    self.move_down();
+                }
             }
             KeyCode::Char('k') => {
-                self.move_up();
-                self.request_list();
+                let mut count: usize = 1;
+                if !self.number_buffer.is_empty() {
+                    count = self.number_buffer.parse::<usize>().unwrap();
+                }
+                self.number_buffer = String::new();
+                for _ in 0..count {
+                    self.move_up();
+                }
+            },
+            KeyCode::Char('d') => {
+                let mut count: usize = 1;
+                if !self.number_buffer.is_empty() {
+                    count = self.number_buffer.parse::<usize>().unwrap();
+                }
+                self.number_buffer = String::new();
+                let half = (self.current_rect.height as usize - 1) / 2;
+                for _ in 0..count {
+                    for _ in 0..half {
+                        self.move_down();
+                    }
+                }
+            },
+            KeyCode::Char('u') => {
+                let mut count: usize = 1;
+                if !self.number_buffer.is_empty() {
+                    count = self.number_buffer.parse::<usize>().unwrap();
+                }
+                self.number_buffer = String::new();
+                let half = (self.current_rect.height as usize - 1) / 2;
+                for _ in 0..count {
+                    for _ in 0..half {
+                        self.move_up();
+                    }
+                }
             },
             KeyCode::Char('h') => {
                 if self.current_paths[0].is_some() {
@@ -40,7 +85,6 @@ impl App {
                     self.current_paths[1] = self.current_paths[0].clone();
                     self.position = self.prev_position;
                     self.prev_position = 0;
-                    self.offset = 0;
                     // Resetting left column
                     self.stored_lists[0] = (false, None);
                     self.current_paths[0] = None;
@@ -48,7 +92,7 @@ impl App {
                 }
             },
             KeyCode::Char('l') => {
-                if self.current_paths[1].is_some() {
+                if self.stored_lists[1].1.is_some() {
                     let new_path = String::from(format!("{}/{}",
                         self.current_paths[1].as_ref().unwrap(),
                         self.stored_lists[1].1.as_ref().unwrap()[self.position].2));
@@ -61,7 +105,6 @@ impl App {
                         self.current_paths[1] = Some(new_path);
                         self.prev_position = self.position;
                         self.position = 0;
-                        self.offset = 0;
                         self.request_list();
                     }
                 }

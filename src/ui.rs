@@ -1,5 +1,5 @@
 use ratatui::{
-    layout::{Constraint, Layout}, style::{Color, Style, Stylize}, text::{Line, Span}, widgets::{Paragraph, Widget}
+    layout::{Alignment, Constraint, Layout}, style::{Color, Style, Stylize}, text::{Line, Span}, widgets::{Paragraph, Widget}
 };
 
 use crate::app::App;
@@ -26,6 +26,7 @@ impl App {
         buf: &mut ratatui::prelude::Buffer)
     {
         Line::from(self.current_paths[1].clone().unwrap()).render(area, buf);
+        Line::from(self.number_buffer.clone()).alignment(Alignment::Right).render(area, buf);
     }
 
     fn render_directory_column(&self, area: ratatui::prelude::Rect,
